@@ -1,3 +1,4 @@
+from cmath import exp
 import boto3
 import pandas as pd
 from datetime import date
@@ -16,6 +17,7 @@ for x in users['Users']:
     iam_users.append(x['UserName'])
 
 iam_users_group = []
+prov_group = []
 
 for key in users['Users']:
     list_of_groups =  iam.list_groups_for_user(UserName=key['UserName'])
@@ -23,7 +25,11 @@ for key in users['Users']:
     if len(list_of_groups['Groups']) > 0:
         for key in list_of_groups['Groups']:
             key = key['GroupName']
-            iam_users_group.append(key)
+            prov_group.append(key)
+        
+        convert = ",".join(map(str,prov_group))       
+        iam_users_group.append(convert)
+            
     else:
         iam_users_group.append('-')
 
@@ -57,20 +63,27 @@ for x in iam_users:
     validate = list_devices['MFADevices']
     if len(list_devices['MFADevices']) > 0:
         for x in list_devices['MFADevices']:
-            iam_mfa_device.append(x)
+            iam_mfa_device.append("Enabled")
     else:
         iam_mfa_device.append('None')
 
 iam_access_key_id = []
 
-for x in iam_users:
-    response = iam.list_access_keys(UserName=x) 
-    for x in response['AccessKeyMetadata']:
-        try:
+for x in users['Users']:
+    prov_key = []
+    response = iam.list_access_keys(UserName=x['UserName'])
+    validate = response['AccessKeyMetadata']
+    if len(response['AccessKeyMetadata']) > 0:
+        for x in response['AccessKeyMetadata']:
             if x['Status'] == "Active":
-                iam_access_key_id.append(x['AccessKeyId'])
-        except:
-                iam_access_key_id.append('None')
+                key = x['AccessKeyId']
+                prov_key.append(key)                    
+            else:
+                prov_key.append('Inactive') 
+        convert = ",".join(map(str,prov_key))        
+        iam_access_key_id.append(convert)
+    else:
+        iam_access_key_id.append('None')
 
 iam_access_key_last_used = []
 
@@ -112,7 +125,18 @@ for x in iam_users:
     except:
         iam_console_access.append('Disabled')
 
-
+#print(len(iam_users))
+##print(len(iam_users_group))
+#print(iam_users_group)
+##print(len(iam_mfa_device))
+#print(len(iam_key_age))
+#print(len(iam_console_login))
+#print(len(iam_access_key_id))
+#print(iam_access_key_id)
+#print(len(iam_access_key_last_used))
+#print(len(iam_user_arn))
+#print(len(iam_user_create_date))
+#print(len(iam_console_access))
 
 iam_dict = {"Nome do usuário": iam_users,
             "Grupos": iam_users_group,
@@ -125,6 +149,13 @@ iam_dict = {"Nome do usuário": iam_users,
             "Data de criação": iam_user_create_date,
             "Acesso ao console": iam_console_access}
 
+
+
+
+
 iam_df = pd.DataFrame(iam_dict)
+
+
+
 
 iam_df.to_excel('iam_teste.xlsx',index=False)
