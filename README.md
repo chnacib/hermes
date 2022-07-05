@@ -52,10 +52,10 @@ python3 main.py
 - [x] AMI
 - [x] EC2
 - [ ] RDS
-- [ ] Snapshot
+- [x] Snapshot
 - [ ] SecurityGroups
-- [ ] EBS
-- [ ] Load balancer
+- [x] EBS
+- [x] Load balancer
 - [ ] S3
 - [ ] EFS
 - [ ] WAF
