@@ -1,10 +1,9 @@
-from curses import keyname
 import boto3
 import pandas as pd
 from datetime import date
 
 
-ec2 = boto3.client('ec2', region_name='us-east-1')
+ec2 = boto3.client('ec2', region_name='sa-east-1')
 
 ec2_instanceid = []
 ec2_instancestate = []
@@ -38,6 +37,7 @@ ec2_elasticip = []
 ec2_sg_name = []
 ec2_imageid = []
 ec2_architecture = []
+ec2_name = []
 
 response = ec2.describe_instances()
 for reservation in response["Reservations"]:
@@ -102,6 +102,15 @@ for reservation in response["Reservations"]:
             ec2_publicip.append(publicipv4)
         except:
             ec2_publicip.append('-')
+        try:
+            checktag = instance['Tags'][0]['Key']
+        except:
+            checktag = "-"
+        if checktag == "Name":
+            ec2_name.append(instance['Tags'][0]['Value'])
+        else:
+            ec2_name.append("-")
+
 
 
 for eni in ec2_network:
@@ -114,7 +123,7 @@ for eni in ec2_network:
         ec2_elasticip.append('-')
 
 
-print(len(ec2_instanceid))
+"""print(len(ec2_instanceid))
 print(len(ec2_instance_az))
 print(len(ec2_architecture))
 print(len(ec2_ebsoptimized))
@@ -142,7 +151,7 @@ print(len(ec2_kernelid))
 print(len(ec2_ramdiskid))
 print(len(ec2_launchindex))
 print(len(ec2_launchtime))
-print(len(ec2_virtualization))
+print(len(ec2_virtualization))"""
 
 
 
@@ -155,6 +164,7 @@ print(len(ec2_virtualization))
 
 
 ec2_dict = {
+    "Nome da instância":ec2_name,
     "ID de instância":ec2_instanceid,
     "Estado da instância":ec2_instancestate,
     "Tipo de instância":ec2_instancetype,

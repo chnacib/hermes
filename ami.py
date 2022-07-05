@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import date
 
 
-ec2 = boto3.client('ec2',region_name='us-east-1')
+ec2 = boto3.client('ec2',region_name='sa-east-1')
 
 
 ami_name = []
@@ -47,7 +47,11 @@ for ami in response['Images']:
     ami_platform.append(ami['PlatformDetails'])
     ami_root_device_name.append(ami['RootDeviceName'])
     ami_root_device_type.append(ami['RootDeviceType'])
-    ami_description.append(ami['Description'])
+    try:
+        ami_description.append(ami['Description'])
+    except:
+        ami_description.append("-")
+
     device_name = ami['BlockDeviceMappings'][0]['DeviceName']
     snapshot = ami['BlockDeviceMappings'][0]['Ebs']['SnapshotId']
     volumesize = ami['BlockDeviceMappings'][0]['Ebs']['VolumeSize']
