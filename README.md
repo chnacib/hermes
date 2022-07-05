@@ -49,8 +49,8 @@ python3 main.py
 ## Work in Progress  👷🏻‍♂️
 
 - [x] IAM
-- [ ] AMI
-- [ ] EC2
+- [x] AMI
+- [x] EC2
 - [ ] RDS
 - [ ] Snapshot
 - [ ] SecurityGroups
