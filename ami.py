@@ -1,13 +1,10 @@
-from inspect import Attribute
-from tracemalloc import Snapshot
 import boto3
 import pandas as pd
 from datetime import date
 
 
-ec2 = boto3.client('ec2')
+ec2 = boto3.client('ec2',region_name='us-east-1')
 
-client = boto3.client('ec2', region_name='us-east-1')
 
 ami_name = []
 ami_id = []
@@ -28,8 +25,9 @@ ami_ramdiskid = []
 ami_product = []
 ami_virtualization = []
 ami_usageoperation = []
+ami_volumesize = []
 
-response = client.describe_images(Owners=['self'])
+response = ec2.describe_images(Owners=['self'])
 for ami in response['Images']:
     try:
         ami_name.append(ami['Name'])
@@ -37,7 +35,8 @@ for ami in response['Images']:
         ami_name.append("-")
     ami_id.append(ami['ImageId'])
     ami_origem.append(ami['ImageLocation'])
-    if ami['Public'] == "False":
+    vis_validate = str(ami['Public'])
+    if vis_validate == "False":
         ami_visibilidade.append('Private')
     else:
         ami_visibilidade.append('Public')
@@ -52,6 +51,7 @@ for ami in response['Images']:
     device_name = ami['BlockDeviceMappings'][0]['DeviceName']
     snapshot = ami['BlockDeviceMappings'][0]['Ebs']['SnapshotId']
     volumesize = ami['BlockDeviceMappings'][0]['Ebs']['VolumeSize']
+    ami_volumesize.append(volumesize)
     volumetype = ami['BlockDeviceMappings'][0]['Ebs']['VolumeType']
     encrypted = ami['BlockDeviceMappings'][0]['Ebs']['Encrypted']
     blockdevice = f'{device_name}={snapshot}:{volumesize}:{encrypted}:{volumetype}'
@@ -89,7 +89,7 @@ for id in ami_id:
 print(len(ami_name))
 print(len(ami_id))
 print(len(ami_origem))
-print(len(ami_visibilidade))
+print(ami_visibilidade)
 print(len(ami_owner))
 print(len(ami_state))
 print(len(ami_creation))
@@ -105,6 +105,34 @@ print(len(ami_ramdiskid))
 print(len(ami_product))
 print(len(ami_virtualization))
 print(len(ami_usageoperation))
+print(len(ami_volumesize))
 
 
 
+ami_dict = {"Nome da AMI":ami_name,
+"ID da AMI":ami_id,
+"Origem":ami_origem,
+"Proprietário":ami_owner,
+"Visibilidade":ami_visibilidade,
+"Status":ami_state,
+"Data de criação":ami_creation,
+"Código de produto":ami_product,
+"Arquitetura":ami_architecture,
+"Descrição":ami_description,
+"Plataforma":ami_platform,
+"Nome de dispositivo raiz":ami_root_device_name,
+"Tipo de dispositivo raiz":ami_root_device_type,
+"Dispositivo de blocos":ami_block_device,
+"Tipo de Imagem":ami_imagetype,
+"ID de kernel":ami_kernelid,
+"ID do disco RAM":ami_ramdiskid,
+"Tamanho da imagem":ami_volumesize,
+"Virtualização":ami_virtualization,
+"Operação de uso":ami_usageoperation}
+
+ami_df = pd.DataFrame(ami_dict)
+
+
+
+
+ami_df.to_excel('ami.xlsx',index=False)
