@@ -1,9 +1,17 @@
+# -*- coding: utf-8 -*-
 import boto3
 import pandas as pd
 from datetime import date
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 
-ec2 = boto3.client('ec2', region_name='sa-east-1')
+region = os.getenv('AWS_REGION')
+proj_name = os.getenv('PROJ_NAME')
+
+ec2 = boto3.client('ec2', region_name=region)
 
 ec2_instanceid = []
 ec2_instancestate = []
@@ -204,5 +212,5 @@ ec2_df['Data de lançamento'] = ec2_df['Data de lançamento'].apply(lambda a: pd
 
 
 
-ec2_df.to_excel('ec2.xlsx',index=False)
+ec2_df.to_excel(f'ec2-{proj_name}-{region}.xlsx',index=False)
 

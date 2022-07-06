@@ -2,8 +2,16 @@ from yaml import load
 import boto3
 import pandas as pd
 from datetime import date
+from dotenv import load_dotenv
+import os
 
-elb = boto3.client('elbv2',region_name="sa-east-1")
+load_dotenv()
+
+
+region = os.getenv('AWS_REGION')
+proj_name = os.getenv('PROJ_NAME')
+
+elb = boto3.client('elbv2',region_name=region)
 
 response = elb.describe_load_balancers()
 
@@ -47,4 +55,4 @@ elb_dict = {
 elb_df = pd.DataFrame(elb_dict)
 elb_df['Criado em'] = elb_df['Criado em'].apply(lambda a: pd.to_datetime(a).date()) 
 
-elb_df.to_excel('elb.xlsx',index=False)
+elb_df.to_excel(f'elb-{proj_name}-{region}.xlsx',index=False)

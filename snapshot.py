@@ -1,10 +1,19 @@
 import boto3
 import pandas as pd
 from datetime import date
+from dotenv import load_dotenv
+import os
 
-ec2 = boto3.client('ec2', region_name='sa-east-1')
+load_dotenv()
 
-response = ec2.describe_snapshots()
+
+region = os.getenv('AWS_REGION')
+proj_name = os.getenv('PROJ_NAME')
+account_id = os.getenv('ACCOUNT_ID')
+
+ec2 = boto3.client('ec2', region_name=region)
+
+response = ec2.describe_snapshots(OwnerIds=[account_id])
 
 
 snapshot_id = []
@@ -83,7 +92,7 @@ snapshot_dict = {
 snapshot_df = pd.DataFrame(snapshot_dict)
 snapshot_df['Iniciado'] = snapshot_df['Iniciado'].apply(lambda a: pd.to_datetime(a).date()) 
 
-snapshot_df.to_excel('snapshot.xlsx',index=False)
+snapshot_df.to_excel(f'snapshot-{proj_name}-{region}.xlsx',index=False)
 
 
 

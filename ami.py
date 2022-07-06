@@ -1,9 +1,16 @@
 import boto3
 import pandas as pd
 from datetime import date
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 
-ec2 = boto3.client('ec2',region_name='sa-east-1')
+region = os.getenv('AWS_REGION')
+proj_name = os.getenv('PROJ_NAME')
+
+ec2 = boto3.client('ec2',region_name=region)
 
 
 ami_name = []
@@ -139,4 +146,4 @@ ami_df = pd.DataFrame(ami_dict)
 
 
 
-ami_df.to_excel('ami.xlsx',index=False)
+ami_df.to_excel(f'ami-{proj_name}-{region}.xlsx',index=False)

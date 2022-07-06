@@ -1,9 +1,17 @@
-from urllib import response
+import re
 import boto3
 import pandas as pd
 from datetime import date
+from dotenv import load_dotenv
+import os
 
-ec2 = boto3.client('ec2', region_name='sa-east-1')
+load_dotenv()
+
+
+region = os.getenv('AWS_REGION')
+proj_name = os.getenv('PROJ_NAME')
+
+ec2 = boto3.client('ec2', region_name=region)
 
 response = ec2.describe_volumes()
 
@@ -86,4 +94,4 @@ ebs_dict = {"Name":ebs_name,
 ebs_df = pd.DataFrame(ebs_dict)
 ebs_df['Created'] = ebs_df['Created'].apply(lambda a: pd.to_datetime(a).date()) 
 
-ebs_df.to_excel('ebs.xlsx',index=False)
+ebs_df.to_excel(f'ebs-{proj_name}-{region}.xlsx',index=False)
