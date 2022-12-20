@@ -1,4 +1,3 @@
-import re
 import boto3
 import pandas as pd
 from datetime import date

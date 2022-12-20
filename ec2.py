@@ -58,7 +58,10 @@ for reservation in response["Reservations"]:
         ec2_az = instance['Placement']['AvailabilityZone']
         ec2_instance_az.append(ec2_az)
         ec2_privatednsname.append(instance['PrivateDnsName'])
-        ec2_privateip.append(instance['PrivateIpAddress'])
+        try:
+            ec2_privateip.append(instance['PrivateIpAddress'])
+        except:
+            ec2_privateip.append('-')
         ec2_monitoring.append(instance['Monitoring']['State'])
         ec2_architecture.append(instance['Architecture'])
         if len(instance['SecurityGroups']) > 0:
@@ -79,15 +82,25 @@ for reservation in response["Reservations"]:
             ec2_keyname.append(instance['KeyName'])
         except:
             ec2_keyname.append("-")
-        ownerid = instance['NetworkInterfaces'][0]['OwnerId']
-        ec2_ownerid.append(ownerid)
-        volumeid = instance['BlockDeviceMappings'][0]['Ebs']['VolumeId']    
-        ec2_volumeid.append(volumeid)
+        try:
+            ownerid = instance['NetworkInterfaces'][0]['OwnerId']
+            ec2_ownerid.append(ownerid)
+        except:
+            ec2_ownerid.append('-')
+        try:
+            volumeid = instance['BlockDeviceMappings'][0]['Ebs']['VolumeId']    
+            ec2_volumeid.append(volumeid)
+        except:
+            ec2_volumeid.append('-')
         ec2_rootdevice.append(instance['RootDeviceName'])
         ec2_roottype.append(instance['RootDeviceType'])
         ec2_ebsoptimized.append(instance['EbsOptimized'])
-        ec2_vpc.append(instance['VpcId'])
-        ec2_subnet.append(instance['SubnetId'])
+        try:
+            ec2_vpc.append(instance['VpcId'])
+            ec2_subnet.append(instance['SubnetId'])
+        except:
+            ec2_vpc.append('-')
+            ec2_subnet.append('-')
         ec2_platform.append(instance['PlatformDetails'])
         ec2_virtualization.append(instance['VirtualizationType'])
         ec2_hibernation.append(instance['HibernationOptions']['Configured'])
@@ -95,7 +108,10 @@ for reservation in response["Reservations"]:
         launchtime = instance['LaunchTime']
         ec2_launchtime.append(launchtime)
         ec2_publicdnsname.append(instance['PublicDnsName'])
-        ec2_network.append(instance['NetworkInterfaces'][0]['NetworkInterfaceId'])
+        try:
+            ec2_network.append(instance['NetworkInterfaces'][0]['NetworkInterfaceId'])
+        except:
+            ec2_network.append('-')
         try:
             ec2_kernelid.append(instance['KernelId'])
         except:
@@ -122,16 +138,15 @@ for reservation in response["Reservations"]:
 
 
 for eni in ec2_network:
-    response = ec2.describe_network_interfaces(NetworkInterfaceIds=[eni])
     try:
+        response = ec2.describe_network_interfaces(NetworkInterfaceIds=[eni])
         elasticip = response['NetworkInterfaces'][0]['Association']['PublicIp']
         ec2_elasticip.append(elasticip)
-
     except:
         ec2_elasticip.append('-')
 
 
-"""print(len(ec2_instanceid))
+print(len(ec2_instanceid))
 print(len(ec2_instance_az))
 print(len(ec2_architecture))
 print(len(ec2_ebsoptimized))
@@ -159,7 +174,7 @@ print(len(ec2_kernelid))
 print(len(ec2_ramdiskid))
 print(len(ec2_launchindex))
 print(len(ec2_launchtime))
-print(len(ec2_virtualization))"""
+print(len(ec2_virtualization))
 
 
 
