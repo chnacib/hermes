@@ -3,97 +3,21 @@ from datetime import date
 from src.common.excel import export_to_excel
 from progress.bar import ChargingBar
 
+iam_users = []
+iam_users_group = []
+prov_group = []
+iam_console_login = []
+iam_key_age = []
+iam_mfa_device = []
+iam_access_key_last_used = []
+iam_user_create_date = []
+iam_user_arn = []
+iam_console_access = []
+iam_access_key_id = []
+
 
 def run():
-
-    bar1 = ChargingBar('IAM')
-
-    iam = boto3.client('iam')
-    iam_r = boto3.resource('iam')
-
-    iam_users = []
-    users = iam.list_users()
-
-    print('IAM')
-    bar1.max = len(users['Users'])
-
-    for x in users['Users']:
-        iam_users.append(x['UserName'])
-
-    iam_users_group = []
-    prov_group = []
-
-    for key in users['Users']:
-        list_of_groups = iam.list_groups_for_user(UserName=key['UserName'])
-        validate = list_of_groups['Groups']
-        if len(list_of_groups['Groups']) > 0:
-            for key in list_of_groups['Groups']:
-                key = key['GroupName']
-                prov_group.append(key)
-
-            convert = ",".join(map(str, prov_group))
-            iam_users_group.append(convert)
-
-        else:
-            iam_users_group.append('-')
-
-    iam_console_login = []
-
-    for x in users['Users']:
-        try:
-            console_login = x['PasswordLastUsed']
-            console_login = console_login.date()
-            console_login = str(console_login)
-            iam_console_login.append(console_login)
-        except:
-            iam_console_login.append("-")
-    iam_key_age = []
-
-    for x in iam_users:
-        username = x
-        response = iam.list_access_keys(UserName=username)
-        try:
-            accesskeydate = response['AccessKeyMetadata'][0]['CreateDate'].date(
-            )
-            currentdate = date.today()
-            active_days = currentdate - accesskeydate
-            iam_key_age.append(f"{active_days.days} days")
-        except:
-            iam_key_age.append("-")
-
-    iam_mfa_device = []
-
-    for x in iam_users:
-        list_devices = iam.list_mfa_devices(UserName=x)
-        validate = list_devices['MFADevices']
-        if len(list_devices['MFADevices']) > 0:
-            for x in list_devices['MFADevices']:
-                iam_mfa_device.append("Enabled")
-        else:
-            iam_mfa_device.append('None')
-
-    iam_access_key_id = []
-
-    for x in users['Users']:
-        prov_key = []
-        response = iam.list_access_keys(UserName=x['UserName'])
-        validate = response['AccessKeyMetadata']
-        if len(response['AccessKeyMetadata']) > 0:
-            for x in response['AccessKeyMetadata']:
-                if x['Status'] == "Active":
-                    key = x['AccessKeyId']
-                    prov_key.append(key)
-                else:
-                    prov_key.append('Inactive')
-            convert = ",".join(map(str, prov_key))
-            iam_access_key_id.append(convert)
-        else:
-            iam_access_key_id.append('None')
-
-    iam_access_key_last_used = []
-
     def get_last_use(key_id):
-
         try:
             response = iam_r.meta.client.get_access_key_last_used(
                 AccessKeyId=key_id)
@@ -103,32 +27,112 @@ def run():
             last_used_date = str(last_used_date)
             iam_access_key_last_used.append(last_used_date)
 
-        except:
+        except Exception as e:
             iam_access_key_last_used.append('-')
 
-    for key_id in iam_access_key_id:
-        get_last_use(key_id)
+    iam = boto3.client('iam')
+    iam_r = boto3.resource('iam')
 
-    iam_user_create_date = []
-    iam_user_arn = []
+    users = iam.list_users()
 
-    for x in iam_users:
-        response = iam.get_user(UserName=x)
+    bar1 = ChargingBar('IAM - Users')
+
+    bar1.max = len(users['Users'])
+
+    for user in users['Users']:
+        bar1.next()
+        username = user['UserName']
+
+        iam_users.append(username)
+
+        list_of_groups = iam.list_groups_for_user(UserName=username)
+        validate = list_of_groups['Groups']
+
+        # 1. Grupos
+        if len(list_of_groups['Groups']) > 0:
+            for group_item in list_of_groups['Groups']:
+                group_name = group_item['GroupName']
+                prov_group.append(group_name)
+            convert = ",".join(map(str, prov_group))
+            iam_users_group.append(convert)
+        else:
+            iam_users_group.append('-')
+
+        # 2. Senha
+        try:
+            console_login = user['PasswordLastUsed']
+            console_login = console_login.date()
+            console_login = str(console_login)
+            iam_console_login.append(console_login)
+        except:
+            iam_console_login.append("-")
+
+        # 3. Access Key
+        response = iam.list_access_keys(UserName=username)
+
+        try:
+            if len(response['AccessKeyMetadata']) > 0:
+                accesskeydate = response['AccessKeyMetadata'][0]['CreateDate'].date(
+                )
+                currentdate = date.today()
+                active_days = currentdate - accesskeydate
+                iam_key_age.append(f"{active_days.days} days")
+
+                prov_key = []
+
+                for x in response['AccessKeyMetadata']:
+                    if x['Status'] == "Active":
+                        key = x['AccessKeyId']
+                        prov_key.append(key)
+                    else:
+                        prov_key.append('Inactive')
+                convert = ",".join(map(str, prov_key))
+                iam_access_key_id.append(convert)
+            else:
+                iam_key_age.append("-")
+                iam_access_key_id.append('None')
+
+        except:
+            pass
+
+        # 4. MFA
+        list_devices = iam.list_mfa_devices(UserName=username)
+        validate = list_devices['MFADevices']
+        if len(list_devices['MFADevices']) > 0:
+            for x in list_devices['MFADevices']:
+                iam_mfa_device.append("Enabled")
+        else:
+            iam_mfa_device.append('None')
+
+        # 6. Create Date
+        response = iam.get_user(UserName=username)
         create_date = response['User'].get('CreateDate')
         create_date = create_date.date()
         create_date = str(create_date)
         iam_user_create_date.append(create_date)
+
+        # 7. Arn
         user_arn = response['User'].get('Arn')
         iam_user_arn.append(user_arn)
 
-    iam_console_access = []
-
-    for x in iam_users:
+        # 8. Console Access
         try:
-            response = iam.get_login_profile(UserName=x)
+            response = iam.get_login_profile(UserName=username)
             iam_console_access.append('Enabled')
         except:
             iam_console_access.append('Disabled')
+
+    bar1.finish()
+
+    bar2 = ChargingBar('IAM - Access Keys')
+
+    bar2.max = len(iam_access_key_id)
+
+    for key_id in iam_access_key_id:
+        bar2.next()
+        get_last_use(key_id)
+
+    bar2.finish()
 
     # print(len(iam_users))
     # print(len(iam_users_group))
@@ -148,12 +152,12 @@ def run():
                 "MFA": iam_mfa_device,
                 "Idade da senha": iam_key_age,
                 "Último login no console": iam_console_login,
-                "ID da chave de acesso": iam_access_key_id,
+                "ID da chave de acesso":  iam_access_key_id,
                 "Última chave de acesso utilizada": iam_access_key_last_used,
                 "ARN": iam_user_arn,
                 "Data de criação": iam_user_create_date,
                 "Acesso ao console": iam_console_access}
 
-    bar1.finish()
+    # bar1.finish()
 
     export_to_excel(iam_dict, 'iam')

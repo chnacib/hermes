@@ -15,6 +15,7 @@ boto3==1.24.11
 pandas==1.4.2
 openpyxl==3.0.10
 awscli==1.18.69
+progress==1.6
 ```
 
 * Possuir acesso programático à conta com pelo menos permissão de **ReadOnlyAccess**
