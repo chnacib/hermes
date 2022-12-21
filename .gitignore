@@ -1,4 +1,5 @@
 output/
 test.py
 .env
-**/__pycache__/
+src/services/__pycache__/
+src/common/__pycache__/
