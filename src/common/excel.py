@@ -12,6 +12,9 @@ output_folder = os.getenv('OUPUT_FOLDER', 'output/')
 
 def export_to_excel(excel_data: dict, service_name: str):
 
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+
     df = pd.DataFrame(excel_data)
 
     # Converte datetime se houver
@@ -24,6 +27,10 @@ def export_to_excel(excel_data: dict, service_name: str):
 
 
 def join_files():
+
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+
     # Pega todos os arquivos dentro da pasta de output que possuem o nome do projeto contido no nome do arquivo.
     file_list = [file for file in os.listdir(
         output_folder) if proj_name in file]
