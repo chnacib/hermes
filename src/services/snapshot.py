@@ -33,7 +33,7 @@ def run():
     snapshot_restore = []
     snapshot_kms = []
 
-    bar1.max = len(response['Snapshots'])
+    bar1.max = len(response['Snapshots']) + 1
 
     for snapshot in response['Snapshots']:
         bar1.next()
@@ -65,7 +65,7 @@ def run():
         except:
             snapshot_kms.append('-')
         try:
-            checktag = instance['Tags'][0]['Key']
+            checktag = snapshot['Tags'][0]['Key']
         except:
             checktag = "-"
         if checktag == "Name":
@@ -73,6 +73,7 @@ def run():
         else:
             snapshot_name.append("-")
 
+    bar1.next()
     bar1.finish()
 
     snapshot_dict = {

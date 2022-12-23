@@ -41,7 +41,7 @@ def run():
 
     bar1 = ChargingBar('AMI - Imagens')
 
-    bar1.max = len(response['Images'])
+    bar1.max = len(response['Images']) + 1
 
     for ami in response['Images']:
         bar1.next()
@@ -80,6 +80,7 @@ def run():
         ami_virtualization.append(ami['VirtualizationType'])
         ami_usageoperation.append(ami['UsageOperation'])
 
+    bar1.next()
     bar1.finish()
 
     bar2 = ChargingBar('AMI - Atributos')
