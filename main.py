@@ -16,8 +16,7 @@ parser.add_argument("--loadbalancer", action='store_true',
 parser.add_argument("--rds", action='store_true', help="Include RDS")
 parser.add_argument("--snapshot", action='store_true', help="Include Snapshot")
 parser.add_argument("-a", "--all", action='store_true', help="Include All")
-parser.add_argument("-j", "--join", action='store_true',
-
+parser.add_argument("-j", "--join", action='store_true',help="Join all files in one excel file")
 
 args = vars(parser.parse_args())
 

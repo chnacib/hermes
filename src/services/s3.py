@@ -122,7 +122,7 @@ def check_bucket_access(bucket):
 
 
 def run():
-    response = s3.list_buckets(region='sa-east-1')
+    response = s3.list_buckets(region=region)
 
     bar.max = len(response['Buckets']) + 1
 

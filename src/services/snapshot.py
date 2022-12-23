@@ -8,7 +8,6 @@ from progress.bar import ChargingBar
 load_dotenv()
 
 region = os.getenv('AWS_REGION')
-account_id = os.getenv('ACCOUNT_ID')
 
 
 def run():
@@ -16,7 +15,7 @@ def run():
 
     bar1 = ChargingBar('Snapshots')
 
-    response = ec2.describe_snapshots(OwnerIds=[account_id])
+    response = ec2.describe_snapshots(OwnerIds=['self'])
     snapshot_id = []
     snapshot_size = []
     snapshot_ownerid = []

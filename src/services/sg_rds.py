@@ -8,7 +8,6 @@ from progress.bar import ChargingBar
 load_dotenv()
 
 region = os.getenv('AWS_REGION')
-account_id = os.getenv('ACCOUNT_ID')
 
 ec2 = boto3.client('ec2', region_name=region)
 rds = boto3.client('rds',region_name=region)

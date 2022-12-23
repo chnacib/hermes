@@ -8,7 +8,6 @@ from progress.bar import ChargingBar
 load_dotenv()
 
 region = os.getenv('AWS_REGION')
-account_id = os.getenv('ACCOUNT_ID')
 
 sg_ids = []
 sg_names = []

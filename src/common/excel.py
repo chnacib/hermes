@@ -5,8 +5,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-proj_name = os.getenv('PROJ_NAME')
-region = os.getenv('AWS_REGION')
+proj_name = os.getenv('PROJ_NAME','None')
+region = os.getenv('AWS_REGION','None')
 output_folder = os.getenv('OUPUT_FOLDER', 'output/')
 ext = '.xlsx'
 
