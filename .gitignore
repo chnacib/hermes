@@ -3,3 +3,5 @@ test.py
 .env
 src/services/__pycache__/
 src/common/__pycache__/
+aws_hermes.egg-info/
+build/
