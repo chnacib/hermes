@@ -51,15 +51,13 @@ python3 main.py
 - [x] IAM
 - [x] AMI
 - [x] EC2
-- [ ] RDS
+- [x] RDS
 - [x] Snapshot
-- [ ] SecurityGroups
+- [x] SecurityGroups
 - [x] EBS
 - [x] Load balancer
-- [ ] S3
-- [ ] EFS
-- [ ] WAF
-- [ ] Imagem docker
+- [x] S3
+- [ ] Docker
 - [ ] CI/CD build & push
 
 
