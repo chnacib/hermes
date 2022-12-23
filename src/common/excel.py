@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import datetime
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv('.env')
 
 proj_name = os.getenv('PROJ_NAME')
 region = os.getenv('AWS_REGION')
