@@ -6,7 +6,7 @@ from src.common.excel import export_to_excel
 from progress.bar import ChargingBar
 
 
-load_dotenv('.env')
+load_dotenv()
 
 
 region = os.getenv('AWS_REGION')

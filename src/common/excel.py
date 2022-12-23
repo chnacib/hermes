@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import datetime
 from dotenv import load_dotenv
 
-load_dotenv('.env')
+load_dotenv()
 
 proj_name = os.getenv('PROJ_NAME')
 region = os.getenv('AWS_REGION')
@@ -36,6 +36,3 @@ def join_files():
         excel_file.to_excel(writer, sheet_name=service_name)
 
     writer.save()
-
-
-=False)

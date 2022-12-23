@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import boto3
 from src.common.excel import export_to_excel
 
-load_dotenv('.env')
+load_dotenv()
 
 region = os.getenv('AWS_REGION')
 
