@@ -1,12 +1,14 @@
-from src.services import s3, ami, ebs, ec2, iam, loadbalancer, rds, snapshot
+from src.services import s3, ami, ebs, ec2, iam, loadbalancer, rds, snapshot, sg_ec2, sg_rds
 from src.common import excel
 
 import argparse
 parser = argparse.ArgumentParser()
 
 # # -db DATABSE -u USERNAME -p PASSWORD -size 20
-parser.add_argument("--s3", action='store_true', help="Include S3")
-parser.add_argument("--ec2", action='store_true', help="Include EC2")
+parser.add_argument("--sg-rds", action='store_true',
+                    help="Include RDS security group")
+parser.add_argument("--sg-ec2", action='store_true',
+                    help="Include EC2 security groups")
 parser.add_argument("--ami", action='store_true', help="Include AMI")
 parser.add_argument("--ebs", action='store_true', help="Include EBS")
 parser.add_argument("--iam", action='store_true', help="Include IAM")
@@ -43,6 +45,12 @@ if args['rds'] or args['all']:
 
 if args['snapshot'] or args['all']:
     snapshot.run()
+
+if args['sg_ec2'] or args['all']:
+    sg_ec2.run()
+
+if args['sg_rds'] or args['all']:
+    sg_rds.run()
 
 if args['join']:
     excel.join_files()
