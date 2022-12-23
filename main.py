@@ -1,5 +1,5 @@
 from src.services import s3, ami, ebs, ec2, iam, loadbalancer, rds, snapshot
-
+from src.common import excel
 
 import argparse
 parser = argparse.ArgumentParser()
@@ -15,6 +15,8 @@ parser.add_argument("-loadbalancer", action='store_true',
 parser.add_argument("-rds", action='store_true', help="Include RDS")
 parser.add_argument("-snapshot", action='store_true', help="Include Snapshot")
 parser.add_argument("-all", action='store_true', help="Include All")
+parser.add_argument("-single", action='store_true',
+                    help="Export to a single file")
 
 args = vars(parser.parse_args())
 
@@ -41,3 +43,6 @@ if args['rds'] or args['all']:
 
 if args['snapshot'] or args['all']:
     snapshot.run()
+
+if args['single']:
+    excel.join_files()
