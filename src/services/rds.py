@@ -28,7 +28,7 @@ def run():
     def list_instances():
         try:
             response = rds.describe_db_instances()
-            bar2.max = len(response['DBInstances'])
+            bar2.max = len(response['DBInstances']) + 1
 
             for db in response['DBInstances']:
                 bar2.next()
@@ -48,6 +48,8 @@ def run():
             print("can't any find databases")
 
     list_instances()
+
+    bar2.next()
     bar2.finish()
 
     rds_dict = {

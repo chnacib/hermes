@@ -50,4 +50,5 @@ def join_files():
 
     writer.save()
 
+    print('')
     print('Output file: ' + os.path.abspath(output_folder + proj_name + ext))

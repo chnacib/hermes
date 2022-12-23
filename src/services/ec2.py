@@ -52,7 +52,7 @@ def run():
     response = ec2.describe_instances()
 
     bar1 = ChargingBar('EC2 - Instances')
-    bar1.max = len(response["Reservations"])
+    bar1.max = len(response["Reservations"]) + 1
 
     for reservation in response["Reservations"]:
         bar1.next()
@@ -144,10 +144,11 @@ def run():
             else:
                 ec2_name.append("-")
 
+    bar1.next()
     bar1.finish()
 
     bar2 = ChargingBar('EC2 - Network')
-    bar2.max = len(ec2_network)
+    bar2.max = len(ec2_network) + 1
 
     for eni in ec2_network:
         bar2.next()
@@ -160,6 +161,7 @@ def run():
             ec2_elasticip.append('-')
 
     bar2.next()
+    bar2.finish()
     # print(len(ec2_instanceid))
     # print(len(ec2_instance_az))
     # print(len(ec2_architecture))

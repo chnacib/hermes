@@ -37,7 +37,7 @@ def run():
 
     bar1 = ChargingBar('IAM - Users')
 
-    bar1.max = len(users['Users'])
+    bar1.max = len(users['Users']) + 1
 
     for user in users['Users']:
         bar1.next()
@@ -122,16 +122,18 @@ def run():
         except:
             iam_console_access.append('Disabled')
 
+    bar1.next()
     bar1.finish()
 
     bar2 = ChargingBar('IAM - Access Keys')
 
-    bar2.max = len(iam_access_key_id)
+    bar2.max = len(iam_access_key_id) + 1
 
     for key_id in iam_access_key_id:
         bar2.next()
         get_last_use(key_id)
 
+    bar2.next()
     bar2.finish()
 
     # print(len(iam_users))

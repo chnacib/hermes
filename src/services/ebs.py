@@ -33,7 +33,7 @@ def run():
 
     bar1 = ChargingBar('EBS - Volumes')
 
-    bar1.max = len(response['Volumes'])
+    bar1.max = len(response['Volumes']) + 1
 
     for volume in response['Volumes']:
         bar1.next()
@@ -79,6 +79,7 @@ def run():
         else:
             ebs_name.append("-")
 
+    bar1.next()
     bar1.finish()
 
     ebs_dict = {"Name": ebs_name,
