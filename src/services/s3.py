@@ -122,9 +122,9 @@ def check_bucket_access(bucket):
 
 
 def run():
-    response = s3.list_buckets(region='sa-east-1')
+    response = s3.list_buckets(region=region)
 
-    bar.max = len(response['Buckets'])
+    bar.max = len(response['Buckets']) + 1
 
     list_buckets(response['Buckets'])
     s3_dict = {
@@ -137,4 +137,5 @@ def run():
 
     export_to_excel(s3_dict, 's3')
 
+    bar.next()
     bar.finish()

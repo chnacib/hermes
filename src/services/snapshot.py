@@ -8,7 +8,6 @@ from progress.bar import ChargingBar
 load_dotenv()
 
 region = os.getenv('AWS_REGION')
-account_id = os.getenv('ACCOUNT_ID')
 
 
 def run():
@@ -16,7 +15,7 @@ def run():
 
     bar1 = ChargingBar('Snapshots')
 
-    response = ec2.describe_snapshots(OwnerIds=[account_id])
+    response = ec2.describe_snapshots(OwnerIds=['self'])
     snapshot_id = []
     snapshot_size = []
     snapshot_ownerid = []
@@ -33,7 +32,7 @@ def run():
     snapshot_restore = []
     snapshot_kms = []
 
-    bar1.max = len(response['Snapshots'])
+    bar1.max = len(response['Snapshots']) + 1
 
     for snapshot in response['Snapshots']:
         bar1.next()
@@ -65,7 +64,7 @@ def run():
         except:
             snapshot_kms.append('-')
         try:
-            checktag = instance['Tags'][0]['Key']
+            checktag = snapshot['Tags'][0]['Key']
         except:
             checktag = "-"
         if checktag == "Name":
@@ -73,6 +72,7 @@ def run():
         else:
             snapshot_name.append("-")
 
+    bar1.next()
     bar1.finish()
 
     snapshot_dict = {

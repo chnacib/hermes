@@ -25,7 +25,7 @@ def run():
     elb_createtime = []
     elb_scheme = []
 
-    bar1.max = len(response['LoadBalancers'])
+    bar1.max = len(response['LoadBalancers']) + 1
 
     for loadbalancer in response['LoadBalancers']:
         bar1.next()
@@ -45,6 +45,7 @@ def run():
         convert = ",".join(map(str, provlist))
         elb_az.append(convert)
 
+    bar1.next()
     bar1.finish()
     elb_dict = {
         "Nome": elb_name,
