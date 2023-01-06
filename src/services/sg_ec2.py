@@ -2,7 +2,7 @@ import boto3
 from dotenv import load_dotenv
 import os
 from src.common.excel import export_to_excel
-from progress.bar import ChargingBar
+from progress.bar import FillingSquaresBar
 
 
 load_dotenv()
@@ -12,7 +12,7 @@ region = os.getenv('AWS_REGION')
 sg_ids = []
 sg_names = []
 
-#to excel
+# to excel
 groups_id = []
 group_names = []
 rules_id = []
@@ -25,7 +25,7 @@ ipv6_cidr = []
 ipv4_cidr = []
 source_sg = []
 
-bar1 = ChargingBar('EC2 - Security groups')
+bar1 = FillingSquaresBar('EC2 - Security groups')
 ec2 = boto3.client('ec2', region_name=region)
 
 
@@ -40,11 +40,12 @@ def list_securitygroups(response):
                         sg_ids.append(sg_id)
                         sg_names.append(sg_name)
 
+
 def describe_rules():
-    for group_id,group_name in zip(sg_ids,sg_names):
+    for group_id, group_name in zip(sg_ids, sg_names):
         bar1.next()
         response = ec2.describe_security_group_rules(Filters=[{
-            'Name':'group-id',
+            'Name': 'group-id',
             'Values': [group_id]
         }])
         for rule in response['SecurityGroupRules']:
@@ -82,9 +83,6 @@ def describe_rules():
             ip_protocol.append(ip)
             from_port.append(fp)
             to_port.append(tp)
-    
-
-
 
 
 def run():
@@ -95,15 +93,15 @@ def run():
     bar1.finish()
 
     sg_dict = {
-    "Security group id":groups_id,
-    "Security group name":group_names,
-    "Securiy group rule id":rules_id,
-    "Tipo":types,
-    "Protocolo":ip_protocol,
-    "From Port":from_port,
-    "To Port":to_port,
-    "Ipv4 range": ipv4_cidr,
-    "Ipv6 range": ipv6_cidr,
-    "SG origem": source_sg     
+        "Security group id": groups_id,
+        "Security group name": group_names,
+        "Securiy group rule id": rules_id,
+        "Tipo": types,
+        "Protocolo": ip_protocol,
+        "From Port": from_port,
+        "To Port": to_port,
+        "Ipv4 range": ipv4_cidr,
+        "Ipv6 range": ipv6_cidr,
+        "SG origem": source_sg
     }
-    export_to_excel(sg_dict, 'sg-ec2')
+    export_to_excel(sg_dict, 'sg_ec2')
