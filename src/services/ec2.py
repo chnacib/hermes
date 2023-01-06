@@ -3,7 +3,7 @@ import boto3
 from dotenv import load_dotenv
 import os
 from src.common.excel import export_to_excel
-from progress.bar import ChargingBar
+from progress.bar import FillingSquaresBar
 
 load_dotenv()
 
@@ -51,7 +51,7 @@ def run():
 
     response = ec2.describe_instances()
 
-    bar1 = ChargingBar('EC2 - Instances')
+    bar1 = FillingSquaresBar('EC2 - Instances')
     bar1.max = len(response["Reservations"]) + 1
 
     for reservation in response["Reservations"]:
@@ -147,7 +147,7 @@ def run():
     bar1.next()
     bar1.finish()
 
-    bar2 = ChargingBar('EC2 - Network')
+    bar2 = FillingSquaresBar('EC2 - Network')
     bar2.max = len(ec2_network) + 1
 
     for eni in ec2_network:

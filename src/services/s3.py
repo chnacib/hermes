@@ -1,4 +1,4 @@
-from progress.bar import ChargingBar
+from progress.bar import FillingSquaresBar
 import json
 import os
 from dotenv import load_dotenv
@@ -13,7 +13,7 @@ region = os.getenv('AWS_REGION')
 s3 = boto3.client('s3')
 
 
-bar = ChargingBar('S3 - Buckets')
+bar = FillingSquaresBar('S3 - Buckets')
 
 
 s3_name = []
