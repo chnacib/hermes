@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 from src.common.excel import export_to_excel
 
-from progress.bar import ChargingBar
+from progress.bar import FillingSquaresBar
 
 
 load_dotenv()
@@ -39,7 +39,7 @@ def run():
 
     response = ec2.describe_images(Owners=['self'])
 
-    bar1 = ChargingBar('AMI - Imagens')
+    bar1 = FillingSquaresBar('AMI - Imagens')
 
     bar1.max = len(response['Images']) + 1
 
@@ -83,9 +83,8 @@ def run():
     bar1.next()
     bar1.finish()
 
-    bar2 = ChargingBar('AMI - Atributos')
-
-    bar2.max = len(ami_id)
+    bar2 = FillingSquaresBar('AMI - Atributos')
+    bar2.max = len(ami_id) + 1
 
     for id in ami_id:
         bar2.next()
@@ -117,6 +116,7 @@ def run():
         else:
             ami_product.append('-')
 
+    bar2.next()
     bar2.finish()
 
     # print(len(ami_name))

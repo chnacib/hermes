@@ -2,7 +2,7 @@ import boto3
 from dotenv import load_dotenv
 import os
 from src.common.excel import export_to_excel
-from progress.bar import ChargingBar
+from progress.bar import FillingSquaresBar
 
 load_dotenv()
 
@@ -31,7 +31,7 @@ def run():
     ebs_multiattach = []
     ebs_volumestatus = []
 
-    bar1 = ChargingBar('EBS - Volumes')
+    bar1 = FillingSquaresBar('EBS - Volumes')
 
     bar1.max = len(response['Volumes']) + 1
 

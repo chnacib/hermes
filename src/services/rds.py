@@ -2,7 +2,7 @@ import boto3
 from dotenv import load_dotenv
 import os
 from src.common.excel import export_to_excel
-from progress.bar import ChargingBar
+from progress.bar import FillingSquaresBar
 
 load_dotenv()
 
@@ -23,7 +23,7 @@ def run():
     db_storage = []
     db_storagetype = []
 
-    bar2 = ChargingBar('RDS - Instances')
+    bar2 = FillingSquaresBar('RDS - Instances')
 
     def list_instances():
         try:

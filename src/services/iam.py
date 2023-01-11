@@ -1,7 +1,7 @@
 import boto3
 from datetime import date
 from src.common.excel import export_to_excel
-from progress.bar import ChargingBar
+from progress.bar import FillingSquaresBar
 
 iam_users = []
 iam_users_group = []
@@ -34,7 +34,7 @@ def run():
 
     users = iam.list_users()
 
-    bar1 = ChargingBar('IAM - Users')
+    bar1 = FillingSquaresBar('IAM - Users')
 
     bar1.max = len(users['Users']) + 1
 
@@ -123,7 +123,7 @@ def run():
     bar1.next()
     bar1.finish()
 
-    bar2 = ChargingBar('IAM - Access Keys')
+    bar2 = FillingSquaresBar('IAM - Access Keys')
 
     bar2.max = len(iam_access_key_id) + 1
 
