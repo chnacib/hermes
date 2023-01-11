@@ -2,7 +2,7 @@ import boto3
 from dotenv import load_dotenv
 import os
 from src.common.excel import export_to_excel
-from progress.bar import ChargingBar
+from progress.bar import FillingSquaresBar
 
 
 load_dotenv()
@@ -13,7 +13,7 @@ region = os.getenv('AWS_REGION')
 def run():
     ec2 = boto3.client('ec2', region_name=region)
 
-    bar1 = ChargingBar('Snapshots')
+    bar1 = FillingSquaresBar('Snapshots')
 
     response = ec2.describe_snapshots(OwnerIds=['self'])
     snapshot_id = []

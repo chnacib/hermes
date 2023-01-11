@@ -1,11 +1,10 @@
 import boto3
 from datetime import date
 from src.common.excel import export_to_excel
-from progress.bar import ChargingBar
+from progress.bar import FillingSquaresBar
 
 iam_users = []
 iam_users_group = []
-prov_group = []
 iam_console_login = []
 iam_key_age = []
 iam_mfa_device = []
@@ -35,7 +34,7 @@ def run():
 
     users = iam.list_users()
 
-    bar1 = ChargingBar('IAM - Users')
+    bar1 = FillingSquaresBar('IAM - Users')
 
     bar1.max = len(users['Users']) + 1
 
@@ -46,11 +45,11 @@ def run():
         iam_users.append(username)
 
         list_of_groups = iam.list_groups_for_user(UserName=username)
-        validate = list_of_groups['Groups']
 
         # 1. Grupos
         if len(list_of_groups['Groups']) > 0:
             for group_item in list_of_groups['Groups']:
+                prov_group = []
                 group_name = group_item['GroupName']
                 prov_group.append(group_name)
             convert = ",".join(map(str, prov_group))
@@ -97,7 +96,6 @@ def run():
 
         # 4. MFA
         list_devices = iam.list_mfa_devices(UserName=username)
-        validate = list_devices['MFADevices']
         if len(list_devices['MFADevices']) > 0:
             for x in list_devices['MFADevices']:
                 iam_mfa_device.append("Enabled")
@@ -125,7 +123,7 @@ def run():
     bar1.next()
     bar1.finish()
 
-    bar2 = ChargingBar('IAM - Access Keys')
+    bar2 = FillingSquaresBar('IAM - Access Keys')
 
     bar2.max = len(iam_access_key_id) + 1
 

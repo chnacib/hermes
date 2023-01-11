@@ -2,7 +2,7 @@ import boto3
 from dotenv import load_dotenv
 import os
 from src.common.excel import export_to_excel
-from progress.bar import ChargingBar
+from progress.bar import FillingSquaresBar
 
 
 load_dotenv()
@@ -10,14 +10,14 @@ load_dotenv()
 region = os.getenv('AWS_REGION')
 
 ec2 = boto3.client('ec2', region_name=region)
-rds = boto3.client('rds',region_name=region)
+rds = boto3.client('rds', region_name=region)
 
-bar1 = ChargingBar('RDS - Security groups')
+bar1 = FillingSquaresBar('RDS - Security groups')
 
 sg_ids = []
 sg_names = []
 
-#to excel
+# to excel
 groups_id = []
 rules_id = []
 types = []
@@ -29,7 +29,8 @@ ipv6_cidr = []
 ipv4_cidr = []
 source_sg = []
 
-def list_securitygroups(response): 
+
+def list_securitygroups(response):
     for db in response["DBInstances"]:
         if len(db['VpcSecurityGroups']) > 0:
             for sg in db['VpcSecurityGroups']:
@@ -38,12 +39,11 @@ def list_securitygroups(response):
                     sg_ids.append(sg_id)
 
 
-
 def describe_rules():
     for group_id in sg_ids:
         bar1.next()
         response = ec2.describe_security_group_rules(Filters=[{
-            'Name':'group-id',
+            'Name': 'group-id',
             'Values': [group_id]
         }])
         for rule in response['SecurityGroupRules']:
@@ -80,9 +80,8 @@ def describe_rules():
             ip_protocol.append(ip)
             from_port.append(fp)
             to_port.append(tp)
-  
 
-    
+
 def run():
     response = rds.describe_db_instances()
     list_securitygroups(response)
@@ -91,14 +90,14 @@ def run():
     bar1.finish()
 
     sg_dict = {
-        "Security group id":groups_id,
-        "Securiy group rule id":rules_id,
-        "Tipo":types,
-        "Protocolo":ip_protocol,
-        "From Port":from_port,
-        "To Port":to_port,
+        "Security group id": groups_id,
+        "Securiy group rule id": rules_id,
+        "Tipo": types,
+        "Protocolo": ip_protocol,
+        "From Port": from_port,
+        "To Port": to_port,
         "Ipv4 range": ipv4_cidr,
         "Ipv6 range": ipv6_cidr,
-        "SG origem": source_sg     
-        }
-    export_to_excel(sg_dict, 'sg-rds')
+        "SG origem": source_sg
+    }
+    export_to_excel(sg_dict, 'sg_rds')

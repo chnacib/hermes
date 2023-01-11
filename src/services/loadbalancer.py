@@ -2,7 +2,7 @@ import boto3
 from dotenv import load_dotenv
 import os
 from src.common.excel import export_to_excel
-from progress.bar import ChargingBar
+from progress.bar import FillingSquaresBar
 
 load_dotenv()
 
@@ -10,7 +10,7 @@ region = os.getenv('AWS_REGION')
 
 
 def run():
-    bar1 = ChargingBar('LoadBalancer')
+    bar1 = FillingSquaresBar('LoadBalancer')
 
     elb = boto3.client('elbv2', region_name=region)
 

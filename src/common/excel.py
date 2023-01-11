@@ -5,8 +5,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-proj_name = os.getenv('PROJ_NAME','None')
-region = os.getenv('AWS_REGION','None')
+proj_name = os.getenv('PROJ_NAME', 'None')
+region = os.getenv('AWS_REGION', 'None')
 output_folder = os.getenv('OUPUT_FOLDER', 'output/')
 ext = '.xlsx'
 
@@ -41,7 +41,7 @@ def join_files():
     file_list = [file for file in os.listdir(
         output_folder) if proj_name in file]
 
-    writer = pd.ExcelWriter(output_folder + proj_name + ext)
+    writer = pd.ExcelWriter(output_folder + proj_name + '-' + region + ext)
 
     for file in file_list:
         service_name = file.split('-').pop(0)
@@ -51,5 +51,6 @@ def join_files():
     writer.save()
 
     print('')
-    print('Output file: ' + os.path.abspath(output_folder + proj_name + ext))
+    print('Output file: ' + os.path.abspath(output_folder +
+          proj_name + '-' + region + ext))
     print('')
