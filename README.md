@@ -13,10 +13,11 @@ Recursos: IAM,AMI,EC2,RDS,Snapshot,Security Groups,EBS,Load balancers,S3,EFS e W
 * Possuir **python3** instalado com as seguintes libs:
 
 ```
-boto3==1.24.11
+boto3==1.21.26
 pandas==1.4.2
 openpyxl==3.0.10
-awscli==1.18.69
+awscli==1.22.81
+python-dotenv==0.20.0
 progress==1.6
 ```
 
@@ -109,21 +110,23 @@ python3 main.py -a -j
 <br>
 
 
----
+## Utilizando docker
 
-## Work in Progress  👷🏻‍♂️
+É possível executar essa aplicação utilizando um container docker hospedado publicamente no dockerhub registry.
 
-- [x] IAM
-- [x] AMI
-- [x] EC2
-- [x] RDS
-- [x] Snapshot
-- [x] SecurityGroups
-- [x] EBS
-- [x] Load balancer
-- [x] S3
-- [ ] Imagem docker
-- [ ] CI/CD build & push
+Para a execução via docker, é necessário ter o awscli instalado na máquina local e configurar as credenciais com o `aws configure`. Após isso, basta utilizar o seguinte comando:
 
+```
+docker run -it -v "$(pwd):/app/output" -v $HOME/.aws/credentials:/root/.aws/credentials:ro -e PROJ_NAME=XXXXX -e AWS_REGION=us-east-1 chnacib/hermes 
+```
+
+Lembrando que deve ser passado as opções adicionais ao final do comando. Por exemplo:
+
+```
+docker run -it -v "$(pwd):/app/output" -v $HOME/.aws/credentials:/root/.aws/credentials:ro -e PROJ_NAME=XXXXX -e AWS_REGION=us-east-1 chnacib/hermes --all --join
+
+```
+
+Os arquivos serão gerados no diretório local onde foi executado o comando docker, ou basta substituir a variável $(pwd) pelo path desejado.
 
 

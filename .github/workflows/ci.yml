@@ -1,0 +1,20 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+
+jobs:
+  build:
+  
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: |
+        docker login -u ${{ secrets.USER }} -p ${{ secrets.PASSWD }}
+        docker build -t chnacib/hermes .
+        docker push chnacib/hermes
