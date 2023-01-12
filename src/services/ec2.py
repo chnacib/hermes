@@ -7,9 +7,7 @@ from progress.bar import FillingSquaresBar
 
 load_dotenv()
 
-
 region = os.getenv('AWS_REGION')
-
 
 ec2_instanceid = []
 ec2_instancestate = []
@@ -56,100 +54,103 @@ def run():
 
     for reservation in response["Reservations"]:
         bar1.next()
-        ec2_reservationid.append(reservation['ReservationId'])
         for instance in reservation["Instances"]:
-            ec2_instanceid.append(instance['InstanceId'])
-            ec2_imageid.append(instance['ImageId'])
-            ec2_instancestate.append(instance['State']['Name'])
-            ec2_instancetype.append(instance['InstanceType'])
-            ec2_az = instance['Placement']['AvailabilityZone']
-            ec2_instance_az.append(ec2_az)
-            ec2_privatednsname.append(instance['PrivateDnsName'])
-            try:
-                ec2_privateip.append(instance['PrivateIpAddress'])
-            except:
-                ec2_privateip.append('-')
-            ec2_monitoring.append(instance['Monitoring']['State'])
-            ec2_architecture.append(instance['Architecture'])
-            if len(instance['SecurityGroups']) > 0:
-                for sg in instance['SecurityGroups']:
-                    prov_list = []
-                    prov_list1 = []
-                    sg_id = instance['SecurityGroups'][0]['GroupId']
-                    sg_name = instance['SecurityGroups'][0]['GroupName']
-                    prov_list.append(sg_id)
-                    prov_list1.append(sg_name)
-                convert = ",".join(map(str, prov_list))
-                convert1 = ",".join(map(str, prov_list1))
-                ec2_sg_id.append(convert)
-                ec2_sg_name.append(convert1)
-            else:
-                ec2_sg_id.append("-")
-            try:
-                ec2_keyname.append(instance['KeyName'])
-            except:
-                ec2_keyname.append("-")
-            try:
-                ownerid = instance['NetworkInterfaces'][0]['OwnerId']
-                ec2_ownerid.append(ownerid)
-            except:
-                ec2_ownerid.append('-')
-            try:
-                volumeid = instance['BlockDeviceMappings'][0]['Ebs']['VolumeId']
-                ec2_volumeid.append(volumeid)
-            except:
-                ec2_volumeid.append('-')
-            ec2_rootdevice.append(instance['RootDeviceName'])
-            ec2_roottype.append(instance['RootDeviceType'])
-            ec2_ebsoptimized.append(instance['EbsOptimized'])
-            try:
-                ec2_vpc.append(instance['VpcId'])
-                ec2_subnet.append(instance['SubnetId'])
-            except:
-                ec2_vpc.append('-')
-                ec2_subnet.append('-')
-            ec2_platform.append(instance['PlatformDetails'])
-            ec2_virtualization.append(instance['VirtualizationType'])
-            ec2_hibernation.append(
-                instance['HibernationOptions']['Configured'])
-            ec2_launchindex.append(instance['AmiLaunchIndex'])
-            launchtime = instance['LaunchTime']
-            ec2_launchtime.append(launchtime)
-            ec2_publicdnsname.append(instance['PublicDnsName'])
-            try:
-                ec2_network.append(
-                    instance['NetworkInterfaces'][0]['NetworkInterfaceId'])
-            except:
-                ec2_network.append('-')
-            try:
-                ec2_kernelid.append(instance['KernelId'])
-            except:
-                ec2_kernelid.append("-")
-            try:
-                ec2_ramdiskid.append(instance['RamdiskId'])
-            except:
-                ec2_ramdiskid.append("-")
+            if instance['State']['Name'] != "terminated":
+                ec2_instancestate.append(instance['State']['Name'])
+                ec2_reservationid.append(reservation['ReservationId'])
+                ec2_instanceid.append(instance['InstanceId'])
+                ec2_imageid.append(instance['ImageId'])
+                ec2_instancetype.append(instance['InstanceType'])
+                ec2_az = instance['Placement']['AvailabilityZone']
+                ec2_instance_az.append(ec2_az)
+                ec2_privatednsname.append(instance['PrivateDnsName'])
+                try:
+                    ec2_privateip.append(instance['PrivateIpAddress'])
+                except:
+                    ec2_privateip.append('-')
+                ec2_monitoring.append(instance['Monitoring']['State'])
+                ec2_architecture.append(instance['Architecture'])
+                if len(instance['SecurityGroups']) > 0:
+                    for sg in instance['SecurityGroups']:
+                        prov_list = []
+                        prov_list1 = []
+                        sg_id = instance['SecurityGroups'][0]['GroupId']
+                        sg_name = instance['SecurityGroups'][0]['GroupName']
+                        prov_list.append(sg_id)
+                        prov_list1.append(sg_name)
+                    convert = ",".join(map(str, prov_list))
+                    convert1 = ",".join(map(str, prov_list1))
+                    ec2_sg_id.append(convert)
+                    ec2_sg_name.append(convert1)
+                else:
+                    ec2_sg_id.append("-")
+                try:
+                    ec2_keyname.append(instance['KeyName'])
+                except:
+                    ec2_keyname.append("-")
+                try:
+                    ownerid = instance['NetworkInterfaces'][0]['OwnerId']
+                    ec2_ownerid.append(ownerid)
+                except:
+                    ec2_ownerid.append('-')
+                try:
+                    volumeid = instance['BlockDeviceMappings'][0]['Ebs']['VolumeId']
+                    ec2_volumeid.append(volumeid)
+                except:
+                    ec2_volumeid.append('-')
+                ec2_rootdevice.append(instance['RootDeviceName'])
+                ec2_roottype.append(instance['RootDeviceType'])
+                ec2_ebsoptimized.append(instance['EbsOptimized'])
+                try:
+                    ec2_vpc.append(instance['VpcId'])
+                    ec2_subnet.append(instance['SubnetId'])
+                except:
+                    ec2_vpc.append('-')
+                    ec2_subnet.append('-')
+                ec2_platform.append(instance['PlatformDetails'])
+                ec2_virtualization.append(instance['VirtualizationType'])
+                ec2_hibernation.append(
+                    instance['HibernationOptions']['Configured'])
+                ec2_launchindex.append(instance['AmiLaunchIndex'])
+                launchtime = instance['LaunchTime']
+                ec2_launchtime.append(launchtime)
+                ec2_publicdnsname.append(instance['PublicDnsName'])
+                try:
+                    ec2_network.append(
+                        instance['NetworkInterfaces'][0]['NetworkInterfaceId'])
+                except:
+                    ec2_network.append('-')
+                try:
+                    ec2_kernelid.append(instance['KernelId'])
+                except:
+                    ec2_kernelid.append("-")
+                try:
+                    ec2_ramdiskid.append(instance['RamdiskId'])
+                except:
+                    ec2_ramdiskid.append("-")
 
-            try:
-                publicipv4 = instance['PublicIpAddress']
-                ec2_publicip.append(publicipv4)
-            except:
-                ec2_publicip.append('-')
-            try:
-                checktag = instance['Tags'][0]['Key']
-            except:
-                checktag = "-"
-            if checktag == "Name":
-                ec2_name.append(instance['Tags'][0]['Value'])
-            else:
-                ec2_name.append("-")
+                try:
+                    publicipv4 = instance['PublicIpAddress']
+                    ec2_publicip.append(publicipv4)
+                except:
+                    ec2_publicip.append('-')
+                if len(instance['Tags']) > 0:
+                    for tag in instance['Tags']:
+                        if tag['Key'] == 'Name':
+                            ec2_name.append(tag['Value'])
+                            tag_name = True
+                    if tag_name == True:
+                        tag_name = None
+                    else:
+                        ec2_name.append("-")
+                else:
+                    ec2_name.append("-")
 
     bar1.next()
     bar1.finish()
-
     bar2 = FillingSquaresBar('EC2 - Network')
     bar2.max = len(ec2_network) + 1
-
+    
     for eni in ec2_network:
         bar2.next()
         try:
@@ -162,35 +163,6 @@ def run():
 
     bar2.next()
     bar2.finish()
-    # print(len(ec2_instanceid))
-    # print(len(ec2_instance_az))
-    # print(len(ec2_architecture))
-    # print(len(ec2_ebsoptimized))
-    # print(len(ec2_imageid))
-    # print(len(ec2_instancetype))
-    # print(len(ec2_instancestate))
-    # print(len(ec2_publicdnsname))
-    # print(len(ec2_privatednsname))
-    # print(len(ec2_publicip))
-    # print(len(ec2_privateip))
-    # print(len(ec2_elasticip))
-    # print(len(ec2_monitoring))
-    # print(len(ec2_keyname))
-    # print(len(ec2_ownerid))
-    # print(len(ec2_subnet))
-    # print(len(ec2_hibernation))
-    # print(len(ec2_platform))
-    # print(len(ec2_vpc))
-    # print(len(ec2_volumeid))
-    # print(len(ec2_reservationid))
-    # print(len(ec2_rootdevice))
-    # print(len(ec2_roottype))
-    # print(len(ec2_sg_name))
-    # print(len(ec2_kernelid))
-    # print(len(ec2_ramdiskid))
-    # print(len(ec2_launchindex))
-    # print(len(ec2_launchtime))
-    # print(len(ec2_virtualization))
 
     ec2_dict = {
         "Nome da instância": ec2_name,

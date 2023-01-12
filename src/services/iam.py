@@ -134,18 +134,6 @@ def run():
     bar2.next()
     bar2.finish()
 
-    # print(len(iam_users))
-    # print(len(iam_users_group))
-    # print(iam_users_group)
-    # print(len(iam_mfa_device))
-    # print(len(iam_key_age))
-    # print(len(iam_console_login))
-    # print(len(iam_access_key_id))
-    # print(iam_access_key_id)
-    # print(len(iam_access_key_last_used))
-    # print(len(iam_user_arn))
-    # print(len(iam_user_create_date))
-    # print(len(iam_console_access))
 
     iam_dict = {"Nome do usuário": iam_users,
                 "Grupos": iam_users_group,
