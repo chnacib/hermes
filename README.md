@@ -1,11 +1,11 @@
-# aws-sdk-hermes
+# Hermes
 ![build](https://github.com/chnacib/aws-sdk-hermes/actions/workflows/ci.yml/badge.svg)
 
 Coleta de recursos na aws de forma programática
 
 O programa tem como objetivo a coleta de recursos dentro de uma conta aws de forma programática.
 
-Recursos: IAM,AMI,EC2,RDS,Snapshot,Security Groups,EBS,Load balancers,S3,EFS e WAF.
+Recursos: IAM,AMI,EC2,RDS,Snapshot,Security Groups,EBS,Load balancers e S3.
 
 
 <br>

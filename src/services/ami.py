@@ -119,26 +119,6 @@ def run():
     bar2.next()
     bar2.finish()
 
-    # print(len(ami_name))
-    # print(len(ami_id))
-    # print(len(ami_origem))
-    # print(ami_visibilidade)
-    # print(len(ami_owner))
-    # print(len(ami_state))
-    # print(len(ami_creation))
-    # print(len(ami_architecture))
-    # print(len(ami_platform))
-    # print(len(ami_root_device_name))
-    # print(len(ami_root_device_type))
-    # print(len(ami_description))
-    # print(len(ami_block_device))
-    # print(len(ami_imagetype))
-    # print(len(ami_kernelid))
-    # print(len(ami_ramdiskid))
-    # print(len(ami_product))
-    # print(len(ami_virtualization))
-    # print(len(ami_usageoperation))
-    # print(len(ami_volumesize))
 
     ami_dict = {"Nome da AMI": ami_name,
                 "ID da AMI": ami_id,
