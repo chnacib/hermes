@@ -28,23 +28,28 @@ def export_to_excel(excel_data: dict, service_name: str):
 
 
 def join_files():
-
+    joined_file = output_folder + proj_name + '-' + region + ext
     # Cria pasta de output
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
     # Remove o arquivo gerado anteriormente, se existe
-    if os.path.exists(output_folder + proj_name + ext):
-        os.remove(output_folder + proj_name + ext)
+    if os.path.exists(joined_file):
+        os.remove(joined_file)
 
     # Pega todos os arquivos dentro da pasta de output que possuem o nome do projeto contido no nome do arquivo.
     file_list = [file for file in os.listdir(
         output_folder) if proj_name in file]
 
-    writer = pd.ExcelWriter(output_folder + proj_name + '-' + region + ext)
+    writer = pd.ExcelWriter(joined_file)
 
     for file in file_list:
+        # Ignora o arquivo gerado anteriormente
+        if file == joined_file:
+            continue
+
         service_name = file.split('-').pop(0)
+        print(output_folder + file)
         excel_file = pd.read_excel(output_folder + file)
         excel_file.to_excel(writer, sheet_name=service_name)
 
