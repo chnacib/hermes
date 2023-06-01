@@ -135,6 +135,7 @@ def run():
                 except:
                     ec2_publicip.append('-')
                 if len(instance['Tags']) > 0:
+                    tag_name = None
                     for tag in instance['Tags']:
                         if tag['Key'] == 'Name':
                             ec2_name.append(tag['Value'])
