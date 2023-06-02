@@ -85,7 +85,8 @@ def describe_rules():
 def run():
     response = rds.describe_db_instances()
     list_securitygroups(response)
-    bar1.max = len(sg_ids)
+    bar1.max = len(sg_ids) + 1
+    bar1.next()
     describe_rules()
     bar1.finish()
 
