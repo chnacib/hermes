@@ -134,8 +134,9 @@ def run():
                     ec2_publicip.append(publicipv4)
                 except:
                     ec2_publicip.append('-')
-                if len(instance['Tags']) > 0:
+                if 'Tags' in instance and len(instance['Tags']) > 0:
                     tag_name = None
+
                     for tag in instance['Tags']:
                         if tag['Key'] == 'Name':
                             ec2_name.append(tag['Value'])
@@ -151,7 +152,7 @@ def run():
     bar1.finish()
     bar2 = FillingSquaresBar('EC2 - Network')
     bar2.max = len(ec2_network) + 1
-    
+
     for eni in ec2_network:
         bar2.next()
         try:

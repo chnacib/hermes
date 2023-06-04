@@ -119,7 +119,6 @@ def run():
     bar2.next()
     bar2.finish()
 
-
     ami_dict = {"Nome da AMI": ami_name,
                 "ID da AMI": ami_id,
                 "Origem": ami_origem,
